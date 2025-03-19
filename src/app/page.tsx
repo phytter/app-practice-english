@@ -1,3 +1,4 @@
+import { NavbarHome } from "@/components/layout/navbar-home";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Film, Mic2, Trophy } from "lucide-react";
@@ -6,6 +7,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>    
+      <NavbarHome />
       <div className="container mx-auto py-8">
         <div className="max-w-3xl mx-auto text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">
