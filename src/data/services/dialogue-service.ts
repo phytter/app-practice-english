@@ -42,11 +42,11 @@ export class DialogueService {
     return response.body;
   }
 
-  async listPracticeHistory(limit: number = 10): Promise<DialoguePracticeHistoryModel[]>{
+  async listPracticeHistory(filterType: string = 'recent', limit: number = 10): Promise<DialoguePracticeHistoryModel[]>{
     const response = await this.httpClient.request({
       url: `${this.url}/practice/history`,
       method: 'get',
-      params: {limit}
+      params: { limit, filterType }
     })
 
     return response.body ?? [];

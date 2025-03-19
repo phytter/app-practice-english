@@ -1,7 +1,6 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,24 +10,13 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DialoguePracticeHistoryModel } from "@/domain/models";
-import { makeDialogueServiceFactory } from "@/main/factories/services";
-import { useQuery } from "@tanstack/react-query";
-import { Award, Calendar, Clock, Star } from "lucide-react";
+import { Award, Clock, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useMemo } from "react";
+import { PracticeHistory } from "./practice-history";
 
 export default function ProfilePage() {
   const { data: session } = useSession();
   const user = session?.user;
-  const dialogueService = useMemo(() => makeDialogueServiceFactory(), []);
-
-  const { data: practiceHistory } = useQuery<DialoguePracticeHistoryModel[]>({
-    queryKey: ["practiceHistory"],
-    queryFn: async () => {
-      return dialogueService.listPracticeHistory();
-    }
-  });
 
   if (!user) return null;
 
@@ -117,34 +105,11 @@ export default function ProfilePage() {
               </TabsList>
 
               <TabsContent value="recent">
-                <div className="space-y-4">
-                  {practiceHistory?.map((practice) => (
-                    <div
-                      key={practice._id}
-                      className="flex items-center justify-between p-4 rounded-lg bg-muted"
-                    >
-                      <div>
-                        <p className="font-medium">{practice.dialogue?.movie?.title}</p>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                          <span>Fluency score: {Math.round(practice.fluency_score * 100)}</span>
-                          <span>Pronunciation score: {Math.round(practice.pronunciation_score * 100)}</span>
-                          <span>•</span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            {new Date(practice.completed_at).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Practice Again
-                      </Button>
-                    </div>
-                  ))}
-                </div>
+                <PracticeHistory filterType="recent" />
               </TabsContent>
 
               <TabsContent value="best">
-
+                <PracticeHistory filterType="best" />
               </TabsContent>
             </Tabs>
           </CardContent>
