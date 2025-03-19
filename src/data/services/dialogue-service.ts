@@ -46,7 +46,7 @@ export class DialogueService {
     const response = await this.httpClient.request({
       url: `${this.url}/practice/history`,
       method: 'get',
-      params: { limit, filterType }
+      params: { limit, filter_type: filterType }
     })
 
     return response.body ?? [];

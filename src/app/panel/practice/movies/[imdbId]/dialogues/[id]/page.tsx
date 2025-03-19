@@ -161,6 +161,7 @@ const { data: dialogue } = useQuery<DialogueModel>({
               >
                 <Button
                   size="lg"
+                  isLoading={submitPracticeMutation.isPending}
                   onClick={isRecording ? stopRecording : startRecording}
                 >
                   {isRecording ? (

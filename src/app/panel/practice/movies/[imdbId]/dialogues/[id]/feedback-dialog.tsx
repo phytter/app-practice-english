@@ -26,7 +26,7 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
   const router = useRouter();
 
   const showConfetti = () => {
-    if (result?.score >= 80) {
+    if (result?.xp_earned >= 80) {
       confetti({
         particleCount: 100,
         spread: 70,
@@ -54,19 +54,19 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
               <div className="relative mb-4">
                 <Star
                   className={`w-16 h-16 ${
-                    result.score >= 80
+                    result.xp_earned >= 80
                       ? "text-yellow-500"
                       : "text-muted-foreground"
                   }`}
                 />
                 <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-bold text-lg">
-                  {result.score}
+                  {result.xp_earned}
                 </span>
               </div>
               <p className="text-xl font-semibold mb-2">
-                {result.score >= 80
+                {result.xp_earned >= 80
                   ? "Excellent!"
-                  : result.score >= 60
+                  : result.xp_earned >= 60
                   ? "Good Job!"
                   : "Keep Practicing!"}
               </p>
