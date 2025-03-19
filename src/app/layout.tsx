@@ -1,4 +1,5 @@
-import { ThemeProvider } from "@/components/providers/theme-provider";
+import AuthProvider from "@/components/providers/auth-provider";
+import ThemeProvider from "@/components/providers/theme-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -24,9 +25,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen flex flex-col">
-            <main className="flex-1">{children}</main>
-          </div>
+          <AuthProvider>
+            <div className="min-h-screen flex flex-col">
+              <main className="flex-1">{children}</main>
+            </div>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
