@@ -1,5 +1,3 @@
-"use client";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Card,
@@ -10,18 +8,17 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { loadUserProfile } from "@/lib/user";
 import { Award, Clock, Star } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { PracticeHistory } from "./practice-history";
 
-export default function ProfilePage() {
-  const { data: session } = useSession();
-  const user = session?.user;
+export default async function ProfilePage() {
+  const user = await loadUserProfile();
 
   if (!user) return null;
 
-  const nextLevelXp = user.progress.level * 1000;
-  const xpProgress = (user.progress.xp_points / nextLevelXp) * 100;
+  const nextLevelXp = user.progress?.level * 1000;
+  const xpProgress = (user.progress?.xp_points / nextLevelXp) * 100;
 
   return (
     <div className="container mx-auto py-8">
@@ -40,9 +37,9 @@ export default function ProfilePage() {
         <div className="grid gap-6 md:grid-cols-2 mb-8">
           <Card>
             <CardHeader>
-              <CardTitle>Level {user.progress.level}</CardTitle>
+              <CardTitle>Level {user.progress?.level}</CardTitle>
               <CardDescription>
-                {user.progress.xp_points} / {nextLevelXp} XP to next level
+                {user.progress?.xp_points} / {nextLevelXp} XP to next level
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -51,13 +48,13 @@ export default function ProfilePage() {
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">
-                    {user.progress.total_dialogues} practices
+                    {user.progress?.total_dialogues} practices
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">
-                    {user.progress.average_pronunciation_score?.toFixed(1)} avg. score
+                    {user.progress?.average_pronunciation_score?.toFixed(1)} avg. score
                   </span>
                 </div>
               </div>

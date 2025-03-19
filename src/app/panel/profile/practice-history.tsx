@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { DialoguePracticeHistoryModel } from "@/domain/models";
 import { makeDialogueServiceFactory } from "@/main/factories/services";
@@ -11,7 +13,7 @@ export function PracticeHistory ({ filterType }: { filterType: 'best' | 'recent'
     queryKey: ["practiceHistory", filterType],
     queryFn: async () => {
       return dialogueService.listPracticeHistory(filterType);
-    }
+    },
   });
 
   return (
