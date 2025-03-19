@@ -1,4 +1,4 @@
-import { AuthService } from "@/data/services/auth-service";
+import { AuthService } from "@/data/services";
 import { makeApiUrl, makeAxiosHttpClient } from "@/main/factories/http";
 
 export const makeAuthServiceFactory = () => {
