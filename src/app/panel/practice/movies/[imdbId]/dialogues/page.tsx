@@ -18,31 +18,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { InputSearch } from "@/components/ui/input-search";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DialogueModel } from "@/domain/models";
-import { useDebounce } from "@/hooks/use-debounce";
 import { makeDialogueServiceFactory } from "@/main/factories/services";
 import { useQuery } from "@tanstack/react-query";
-import { Film, Search } from "lucide-react";
+import { Film } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 export default function PracticePage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearch = useDebounce(searchQuery);
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
   const router = useRouter()
   const { imdbId } = useParams<{ imdbId: string }>();
   const dialogueService = useMemo(() => makeDialogueServiceFactory(), []);
 
   const { data: dialogues, isLoading } = useQuery<DialogueModel[]>({
-    queryKey: ['dialogues', debouncedSearch, selectedDifficulty, imdbId],
+    queryKey: ['dialogues', searchQuery, selectedDifficulty, imdbId],
     queryFn: async () => {
       return dialogueService.search({
         imdb_id: imdbId,
         difficulty: selectedDifficulty !== 'all' ? selectedDifficulty : '',
-        search: debouncedSearch
+        search: searchQuery
       });
     },
   });
@@ -51,17 +49,7 @@ export default function PracticePage() {
     <div className="container mx-auto p-8 pt-4">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Dialogues</h1>
-        <div className="flex gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search dialogues..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="max-w-md pl-10"
-            />
-          </div>
-        </div>
+        <InputSearch placeholder="Search for dialogues..." onSearch={setSearchQuery} />
       </div>
 
       <Tabs defaultValue="all" className="mb-8" onValueChange={e => setSelectedDifficulty(e)}>

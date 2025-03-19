@@ -7,26 +7,24 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { InputSearch } from "@/components/ui/input-search";
 import { MovieModel } from "@/domain/models";
-import { useDebounce } from "@/hooks";
 import { makeMovieServiceFactory } from "@/main/factories/services";
 import { useQuery } from "@tanstack/react-query";
-import { Film, Search } from "lucide-react";
+import { Film } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
 export default function PracticeMoviesPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearch = useDebounce(searchQuery);
   const movieService = useMemo(() => makeMovieServiceFactory(), []);
 
   const { data: movies = [], isLoading } = useQuery<MovieModel[]>({
-    queryKey: ['movies_processed', debouncedSearch],
+    queryKey: ['movies_processed', searchQuery],
     queryFn: async () => {
       const params = { search: '' };
-      if (debouncedSearch) {
-        params['search'] = debouncedSearch;
+      if (searchQuery) {
+        params['search'] = searchQuery;
       }
       return movieService.loadProcessed(params);
     },
@@ -36,17 +34,7 @@ export default function PracticeMoviesPage() {
     <div className="container mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Movies</h1>
-        <div className="flex gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search movies..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="max-w-md pl-10"
-            />
-          </div>
-        </div>
+        <InputSearch placeholder="Search for movies..." onSearch={setSearchQuery} />
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -2,9 +2,8 @@
 import { LoadCardListWrapper } from "@/components/layout/load-card-list-wrapper";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { InputSearch } from "@/components/ui/input-search";
 import { MovieModel } from "@/domain/models";
-import { useDebounce } from "@/hooks/use-debounce";
 import { makeMovieServiceFactory } from "@/main/factories/services/movie-service-factory";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -13,21 +12,20 @@ import { toast } from "sonner";
 
 export default function AdminMoviesPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const debouncedSearch = useDebounce(searchQuery);
   const movieService = useMemo(() => makeMovieServiceFactory(), []);
 
   const { data: movies, isLoading } = useQuery<MovieModel[]>({
-    queryKey: ["movies", debouncedSearch],
+    queryKey: ["movies", searchQuery],
     queryFn: async () => {
-      if (!debouncedSearch) return [];
+      if (!searchQuery) return [];
       try {
-        return movieService.search({ search: debouncedSearch });
+        return movieService.search({ search: searchQuery });
       } catch {
         toast.error('Failed to search movies. Please try again');
         return [];
       }
     },
-    enabled: !!debouncedSearch,
+    enabled: !!searchQuery,
   });
 
   const processMovieMutation = useMutation({
@@ -39,18 +37,10 @@ export default function AdminMoviesPage() {
   });
 
   return (
-    <div className="">
-      <h1 className="text-3xl font-bold mb-8">Movie Management</h1>
-      
-      <div className="mb-8">
-        <div className="flex gap-4">
-          <Input
-            placeholder="Search for movies..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-md"
-          />
-        </div>
+    <div className="container mx-auto">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Movie Management</h1>
+        <InputSearch placeholder="Search for movies..." onSearch={setSearchQuery} />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
