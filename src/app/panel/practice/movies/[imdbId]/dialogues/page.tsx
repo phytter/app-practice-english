@@ -13,6 +13,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -96,14 +97,14 @@ export default function PracticePage() {
                   </CardContent>
                 </Card>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-full overflow-y-auto">
+              <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>{dialogue.movie.title}</DialogTitle>
                   <DialogDescription>
-                    Choose your character and start practicing
+                    Start practicing
                   </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4">
+                <div className="scrollbar-thin px-2 grid gap-4 max-h-[80vh] overflow-auto">
                   {dialogue.lines.map((line, index) => (
                     <div
                       key={index}
@@ -116,9 +117,9 @@ export default function PracticePage() {
                     </div>
                   ))}
                 </div>
-                <div className="flex justify-end gap-4 mt-4">
+                <DialogFooter>
                   <Button onClick={() => router.push(`/panel/practice/movies/${imdbId}/dialogues/${dialogue._id}`)}>Start Practice</Button>
-                </div>
+                </DialogFooter>
               </DialogContent>
             </Dialog>
           ))}

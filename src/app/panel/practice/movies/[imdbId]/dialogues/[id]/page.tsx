@@ -2,12 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { DialogueModel, DialoguePracticeResultModel } from "@/domain/models";
 import { makeDialogueServiceFactory } from "@/main/factories/services";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import { Mic, Play, Square, Volume2 } from "lucide-react";
+import { Mic, Play, Square } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -137,10 +136,12 @@ const { data: dialogue } = useQuery<DialogueModel>({
                     key={index}
                     className="flex items-start gap-4 p-4 rounded-lg transition-colors"
                   >
-                    <div className="font-medium min-w-[100px]">
-                      {line.character}:
-                    </div>
-                    <div>{line.text}</div>
+                    {line.character && (
+                      <div className="font-medium min-w-[100px]">
+                        {line.character}
+                      </div>
+                    )}
+                    <div>{` - ${line.text}`}</div>
                   </motion.div>
                 ))}
               </div>
@@ -151,38 +152,32 @@ const { data: dialogue } = useQuery<DialogueModel>({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="space-y-4"
+          className="fixed bottom-0 left-0 right-0 pt-4 shadow-lg space-y-4"
         >
-          <div className="flex justify-between items-center">
-            <div className="flex gap-4">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+          <div className="flex gap-4 justify-end pr-35">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                size="lg"
+                isLoading={submitPracticeMutation.isPending}
+                onClick={isRecording ? stopRecording : startRecording}
               >
-                <Button
-                  size="lg"
-                  isLoading={submitPracticeMutation.isPending}
-                  onClick={isRecording ? stopRecording : startRecording}
-                >
-                  {isRecording ? (
-                    <>
-                      <Square className="mr-2" /> Stop Recording
-                    </>
-                  ) : (
-                    <>
-                      <Mic className="mr-2" /> Start Recording
-                    </>
-                  )}
-                </Button>
-              </motion.div>
-              <Button size="lg" onClick={playAudio} disabled={!canPlayAudio}>
-                <Play className="mr-2" /> Play Audio
+                {isRecording ? (
+                  <>
+                    <Square className="mr-2" /> Stop Recording
+                  </>
+                ) : (
+                  <>
+                    <Mic className="mr-2" /> Start Recording
+                  </>
+                )}
               </Button>
-            </div>
-            <div className="flex items-center gap-4">
-              <Volume2 />
-              <Progress value={33} className="w-[200px]" />
-            </div>
+            </motion.div>
+            <Button size="lg" onClick={playAudio} disabled={!canPlayAudio}>
+              <Play className="mr-2" /> Play Audio
+            </Button>
           </div>
           <div ref={waveformRef} />
         </motion.div>
