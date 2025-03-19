@@ -6,10 +6,10 @@ export class AuthorizeHttpClientDecorator implements HttpClient {
 
   async request (data: HttpRequest): Promise<HttpResponse> {
     const session = await getSession();
-    if (session?.accessToken) {
+    if (session?.access_token) {
       Object.assign(data, {
         headers: Object.assign(data.headers || {}, {
-          authorization: `Bearer ${session?.accessToken}`
+          authorization: `Bearer ${session?.access_token}`
         })
       })
     }

@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
         try {
           const authService = makeAuthServiceFactory();
           const { access_token, user } = await authService.googleLogin(account.id_token);
-          token.accessToken = access_token;
+          token.access_token = access_token;
           token.user = user;
         } catch (error) {
           console.error("Error during authentication:", error);
@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken as string;
+      session.access_token = token.access_token as string;
       session.user = token.user as UserModel;
       return session;
     },
