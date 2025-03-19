@@ -1,5 +1,5 @@
 import { HttpClient } from "@/data/protocols/http";
-import { DialogueModel, DialoguePracticeResultModel } from "@/domain/models";
+import { DialogueModel, DialoguePracticeHistoryModel, DialoguePracticeResultModel } from "@/domain/models";
 
 type DialogueSearchParamsType = {
   imdb_id: string;
@@ -10,7 +10,7 @@ type DialogueSearchParamsType = {
 export class DialogueService {
   constructor (
     protected readonly url: string,
-    protected readonly httpClient: HttpClient<DialogueModel[] & DialoguePracticeResultModel & DialogueModel>
+    protected readonly httpClient: HttpClient<DialogueModel[] & DialoguePracticeResultModel & DialogueModel & DialoguePracticeHistoryModel[]>
   ) {}
 
   async show(dialogueId: string): Promise<DialogueModel> {
@@ -40,6 +40,16 @@ export class DialogueService {
     });
 
     return response.body;
+  }
+
+  async listPracticeHistory(limit: number = 10): Promise<DialoguePracticeHistoryModel[]>{
+    const response = await this.httpClient.request({
+      url: `${this.url}/practice/history`,
+      method: 'get',
+      params: {limit}
+    })
+
+    return response.body ?? [];
   }
 
 }

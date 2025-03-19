@@ -127,7 +127,7 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
           <Button variant="outline" onClick={onClose}>
             Practice Again
           </Button>
-          <Button onClick={() => router.push("/practice")}>
+          <Button onClick={() => router.push("/panel/practice")}>
             Choose Another Dialogue
           </Button>
         </DialogFooter>

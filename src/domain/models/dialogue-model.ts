@@ -26,3 +26,14 @@ export interface DialoguePracticeResultModel {
   }>;
   xp_earned: number;
 }
+
+export interface DialoguePracticeHistoryModel {
+  _id: string;
+  pronunciation_score: number;
+  fluency_score: number;
+  xp_earned: number;
+  completed_at: string;
+  practice_duration_seconds: number;
+  dialogue: Partial<DialogueModel>;
+  character_played?: string;
+}
