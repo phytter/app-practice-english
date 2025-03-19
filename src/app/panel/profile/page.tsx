@@ -64,7 +64,13 @@ export default async function ProfilePage() {
           <Card>
             <CardHeader>
               <CardTitle>Achievements</CardTitle>
-              <CardDescription>Your earned badges</CardDescription>
+              <CardDescription>
+                {user.achievements?.length
+                  ? 'Your earned badges'
+                  : `You don't earned badges yet`
+                }
+                
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
