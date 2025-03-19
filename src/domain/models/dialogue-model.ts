@@ -14,3 +14,15 @@ export interface DialogueModel {
   duration_seconds: number;
   lines: DialogueLineType[];
 }
+
+export interface DialoguePracticeResultModel {
+  score: number;
+  pronunciation_score: number;
+  fluency_score: number;
+  transcribed_text: string;
+  suggestions: Array<{
+    type: string;
+    message: string;
+  }>;
+  xp_earned: number;
+}
