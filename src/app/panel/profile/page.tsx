@@ -10,12 +10,13 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { loadUserProfile } from "@/lib/user";
 import { Award, Clock, Star } from "lucide-react";
+import ProfileLoading from "./loading";
 import { PracticeHistory } from "./practice-history";
 
 export default async function ProfilePage() {
   const user = await loadUserProfile();
 
-  if (!user) return null;
+  if (!user) return <ProfileLoading />;
 
   const nextLevelXp = user.progress?.level * 1000;
   const xpProgress = (user.progress?.xp_points / nextLevelXp) * 100;
