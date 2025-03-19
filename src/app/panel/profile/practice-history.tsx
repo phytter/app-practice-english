@@ -5,16 +5,22 @@ import { DialoguePracticeHistoryModel } from "@/domain/models";
 import { makeDialogueServiceFactory } from "@/main/factories/services";
 import { useQuery } from "@tanstack/react-query";
 import { Calendar } from "lucide-react";
-import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useMemo } from "react";
 
 export function PracticeHistory ({ filterType }: { filterType: 'best' | 'recent' }) {
-    const dialogueService = useMemo(() => makeDialogueServiceFactory(), []);
+  const dialogueService = useMemo(() => makeDialogueServiceFactory(), []);
+  const router = useRouter();
   const { data: practiceHistory } = useQuery<DialoguePracticeHistoryModel[]>({
     queryKey: ["practiceHistory", filterType],
     queryFn: async () => {
       return dialogueService.listPracticeHistory(filterType);
     },
   });
+
+  const onPracticeAgain = useCallback((practice: DialoguePracticeHistoryModel) => {
+    router.push(`/panel/practice/movies/${practice.dialogue.movie?.imdb_id}/dialogues/${practice.dialogue._id}`);
+  }, [router])
 
   return (
     <div className="space-y-4">
@@ -33,7 +39,9 @@ export function PracticeHistory ({ filterType }: { filterType: 'best' | 'recent'
                 </span>
               </div>
             </div>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={
+              () => onPracticeAgain(practice)
+            }>
               Practice Again
             </Button>
           </div>
