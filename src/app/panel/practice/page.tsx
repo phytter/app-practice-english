@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { MovieModel } from "@/domain/models";
 import { useDebounce } from "@/hooks";
-import { makeMovieServiceFactory } from "@/main/factories/services/movie-service-factory";
+import { makeMovieServiceFactory } from "@/main/factories/services";
 import { useQuery } from "@tanstack/react-query";
 import { Film, Search } from "lucide-react";
 import Link from "next/link";
