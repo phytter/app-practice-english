@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export type HttpRequest = {
   url: string
   method: HttpMethod
