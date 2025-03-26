@@ -1,4 +1,4 @@
-name: Deploy Next.js 15
+name: frontend CI/CD Pipeline
 
 on:
   push:
@@ -30,7 +30,6 @@ jobs:
         echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env
         npm run build
         rm .env
-
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -45,13 +44,12 @@ jobs:
     - name: Build and Push Docker Image
       env:
         ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-        ECR_REPOSITORY: english-${{env.ENVIRONMENT}}-frontend
+        ECR_REPOSITORY: practice-english-frontend
       run: |
         docker build --platform linux/amd64 -f shipping/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
           --build-arg NODE_ENV=${{env.ENVIRONMENT}} \
           .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-
     - name: Force ECS Deployment
       env:
         ECS_CLUSTER: english-${{env.ENVIRONMENT}}-frontend-cluster
