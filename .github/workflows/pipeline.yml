@@ -44,7 +44,7 @@ jobs:
     - name: Build and Push Docker Image
       env:
         ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-        ECR_REPOSITORY: practice-english-frontend
+        ECR_REPOSITORY: practice-english-front
       run: |
         docker build --platform linux/amd64 -f shipping/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
           --build-arg NODE_ENV=${{env.ENVIRONMENT}} \
