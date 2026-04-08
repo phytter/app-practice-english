@@ -53,11 +53,10 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
             >
               <div className="relative mb-4">
                 <Star
-                  className={`w-16 h-16 ${
-                    result.xp_earned >= 80
+                  className={`w-16 h-16 ${result.xp_earned >= 80
                       ? "text-yellow-500"
                       : "text-muted-foreground"
-                  }`}
+                    }`}
                 />
                 <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-bold text-lg">
                   {result.xp_earned}
@@ -67,8 +66,8 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
                 {result.xp_earned >= 80
                   ? "Excellent!"
                   : result.xp_earned >= 60
-                  ? "Good Job!"
-                  : "Keep Practicing!"}
+                    ? "Good Job!"
+                    : "Keep Practicing!"}
               </p>
               <p className="text-sm text-muted-foreground">
                 You earned {result.xp_earned} XP
@@ -107,7 +106,7 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
               transition={{ delay: 0.6 }}
               className="space-y-2"
             >
-              {result.suggestions.map((comment, index) => (
+              {result.suggestions?.map((comment, index) => (
                 <motion.div
                   key={index}
                   initial={{ x: -20, opacity: 0 }}
