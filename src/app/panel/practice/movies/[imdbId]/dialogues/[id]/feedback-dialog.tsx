@@ -24,9 +24,10 @@ interface FeedbackDialogProps {
 
 export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps) {
   const router = useRouter();
+  const isExcellent = result.xp_earned >= 80;
 
   const showConfetti = () => {
-    if (result?.xp_earned >= 80) {
+    if (isExcellent) {
       confetti({
         particleCount: 100,
         spread: 70,
@@ -53,22 +54,18 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
             >
               <div className="relative mb-4">
                 <Star
-                  className={`w-16 h-16 ${
-                    result.xp_earned >= 80
-                      ? "text-yellow-500"
-                      : "text-muted-foreground"
-                  }`}
+                  className={`w-16 h-16 ${isExcellent ? "text-yellow-500" : "text-muted-foreground"}`}
                 />
                 <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-bold text-lg">
                   {result.xp_earned}
                 </span>
               </div>
               <p className="text-xl font-semibold mb-2">
-                {result.xp_earned >= 80
+                {isExcellent
                   ? "Excellent!"
                   : result.xp_earned >= 60
-                  ? "Good Job!"
-                  : "Keep Practicing!"}
+                    ? "Good Job!"
+                    : "Keep Practicing!"}
               </p>
               <p className="text-sm text-muted-foreground">
                 You earned {result.xp_earned} XP
@@ -85,7 +82,7 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
                 <div className="flex justify-between mb-2">
                   <span className="text-sm">Pronunciation</span>
                   <span className="text-sm font-medium">
-                    {result.pronunciation_score * 100}%
+                    {Math.round(result.pronunciation_score * 100)}%
                   </span>
                 </div>
                 <Progress value={result.pronunciation_score * 100} />
@@ -94,7 +91,7 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
                 <div className="flex justify-between mb-2">
                   <span className="text-sm">Fluency</span>
                   <span className="text-sm font-medium">
-                    {result.fluency_score * 100}%
+                    {Math.round(result.fluency_score * 100)}%
                   </span>
                 </div>
                 <Progress value={result.fluency_score * 100} />
@@ -107,9 +104,9 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
               transition={{ delay: 0.6 }}
               className="space-y-2"
             >
-              {result.suggestions.map((comment, index) => (
+              {result.suggestions?.map((comment, index) => (
                 <motion.div
-                  key={index}
+                  key={`${comment.type}-${comment.message}`}
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: 0.8 + index * 0.1 }}

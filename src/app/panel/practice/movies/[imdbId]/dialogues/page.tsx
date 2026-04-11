@@ -85,7 +85,7 @@ export default function PracticePage() {
                   </CardContent>
                 </Card>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-4xl">
                 <DialogHeader>
                   <DialogTitle>{dialogue.movie.title}</DialogTitle>
                   <DialogDescription>
