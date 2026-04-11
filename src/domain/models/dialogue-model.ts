@@ -19,7 +19,7 @@ export interface DialoguePracticeResultModel {
   pronunciation_score: number;
   fluency_score: number;
   transcribed_text: string;
-  suggestions: Array<{
+  suggestions?: Array<{
     type: string;
     message: string;
   }>;
