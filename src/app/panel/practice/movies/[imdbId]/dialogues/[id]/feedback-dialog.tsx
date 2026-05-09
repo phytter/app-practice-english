@@ -80,6 +80,18 @@ export function FeedbackDialog({ isOpen, onClose, result }: FeedbackDialogProps)
             >
               <div>
                 <div className="flex justify-between mb-2">
+                  <span className="text-sm">Word Accuracy</span>
+                  <span className="text-sm font-medium">
+                    {Math.round(result.word_accuracy * 100)}%
+                  </span>
+                </div>
+                <Progress value={result.word_accuracy * 100} />
+                <p className="text-xs text-muted-foreground mt-1">
+                  How many of the right words you said
+                </p>
+              </div>
+              <div>
+                <div className="flex justify-between mb-2">
                   <span className="text-sm">Pronunciation</span>
                   <span className="text-sm font-medium">
                     {Math.round(result.pronunciation_score * 100)}%

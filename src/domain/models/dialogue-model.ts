@@ -18,6 +18,7 @@ export interface DialogueModel {
 export interface DialoguePracticeResultModel {
   pronunciation_score: number;
   fluency_score: number;
+  word_accuracy: number;
   transcribed_text: string;
   suggestions?: Array<{
     type: string;
