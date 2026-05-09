@@ -12,6 +12,18 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import WaveSurfer from "wavesurfer.js";
 import { FeedbackDialog } from "./feedback-dialog";
+import {
+  alignExpectedWords,
+  isWordToken,
+  tokenizeLine,
+  WordStatus,
+} from "./word-highlighting";
+
+const WORD_STATUS_CLASS: Record<WordStatus, string> = {
+  matched: "text-green-600 dark:text-green-400",
+  "low-confidence": "text-amber-600 dark:text-amber-400",
+  missing: "text-red-600 dark:text-red-400 underline decoration-dotted",
+};
 
 export default function PracticeDialoguePage() {
   const [isRecording, setIsRecording] = useState(false);
@@ -104,10 +116,34 @@ const { data: dialogue } = useQuery<DialogueModel>({
     audio.play();
   };
 
-  const closeFeedBack = () => { 
+  const closeFeedBack = () => {
     setShowFeedback(false);
   }
 
+  const lineTokens = useMemo(() => {
+    if (!dialogue) return [];
+
+    const expectedWords: string[] = [];
+    for (const line of dialogue.lines) {
+      for (const token of tokenizeLine(line.text)) {
+        if (isWordToken(token)) expectedWords.push(token);
+      }
+    }
+
+    const statuses = practiceResult
+      ? alignExpectedWords(expectedWords, practiceResult.word_timings ?? [])
+      : null;
+
+    let wordIndex = 0;
+    return dialogue.lines.map((line) =>
+      tokenizeLine(line.text).map((token) => {
+        const word = isWordToken(token);
+        const status = word && statuses ? statuses[wordIndex] : null;
+        if (word) wordIndex++;
+        return { token, status };
+      }),
+    );
+  }, [dialogue, practiceResult]);
 
   if (!dialogue) return null;
 
@@ -141,7 +177,18 @@ const { data: dialogue } = useQuery<DialogueModel>({
                         {line.character}
                       </div>
                     )}
-                    <div>{` - ${line.text}`}</div>
+                    <div>
+                      {" - "}
+                      {lineTokens[index]?.map(({ token, status }, i) => (
+                        <span
+                          key={i}
+                          className={status ? WORD_STATUS_CLASS[status] : undefined}
+                        >
+                          {i > 0 ? " " : ""}
+                          {token}
+                        </span>
+                      ))}
+                    </div>
                   </motion.div>
                 ))}
               </div>

@@ -15,11 +15,19 @@ export interface DialogueModel {
   lines: DialogueLineType[];
 }
 
+export interface DialoguePracticeWordTiming {
+  word: string;
+  start_time: number;
+  end_time: number;
+  confidence: number;
+}
+
 export interface DialoguePracticeResultModel {
   pronunciation_score: number;
   fluency_score: number;
   word_accuracy: number;
   transcribed_text: string;
+  word_timings: DialoguePracticeWordTiming[];
   suggestions?: Array<{
     type: string;
     message: string;
